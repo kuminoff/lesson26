@@ -13,23 +13,19 @@ const getData = ({ url: url, data: data }) => {
 };
 
 const sendData = ({ url: url, data: data }) => {
-  fetch(url, {
-    method: "POST",
-    body: data,
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.log(error));
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", url);
+  xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+  xhr.send(data);
+  xhr.onload = () => console.log(xhr.response);
+  xhr.onerror = function () {
+    console.log(`Ошибка`);
+  };
 };
 
-const user = getData({
+getData({
   url: "db.json",
-});
-
-user.then((data) =>
+}).then((data) =>
   sendData({
     url: "https://jsonplaceholder.typicode.com/posts",
     data: JSON.stringify(data),
